@@ -1,4 +1,6 @@
 blockchain = []
+open_trnasaction = []
+owner = 'Firas Belhiba'
 
 # Returns the last value of the blockchain
 
@@ -10,14 +12,29 @@ def get_last_blockchain_value():
 
 
 def get_transaction_value():
-    user_input = float(input('Please enter your transaction amount :'))
-    return user_input
+    transaction_recipient = input('Enter the recipient of the transaction')
+    transaction_amount = float(input('Please enter your transaction amount :'))
+    return transaction_recipient, transaction_amount
 
 
-def add_transaction(transaction_amount, last_transaction=[1]):
-    if last_transaction == None:
-        last_transaction = [1]
-    blockchain.append([last_transaction, transaction_amount])
+def add_transaction(recipient, sender=owner, amount=1.0):
+    # Transaction dictionnary
+    transaction = {
+        'sender': sender,
+        'recipient': recipient,
+        'amount': amount
+    }
+    open_trnasaction.append(transaction)
+
+
+def mine_block():
+    last_block = blockchain[-1]
+    block = {
+        'previous_hash': 'XXX',
+        'index': len(blockchain),
+        'transaction': open_trnasaction
+    }
+    blockchain.append(block)
 
 
 def get_user_choice():
@@ -63,8 +80,10 @@ while waiting_input:
     print('x: Quit')
     user_choice = get_user_choice()
     if user_choice == '1':
-        tx_amount = get_transaction_value()
-        add_transaction(tx_amount, get_last_blockchain_value())
+        transaction_data = get_transaction_value()
+        recipient, amount = transaction_data
+        add_transaction(recipient, amount=amount)
+        print(open_trnasaction)
     elif user_choice == '2':
         print_blockchain_elements()
     elif user_choice == 'x':
